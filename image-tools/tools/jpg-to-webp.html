@@ -1,13 +1,80 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <meta charset="UTF-8">
-
 <title>JPG to WebP Converter</title>
 
-<link rel="stylesheet" href="../css/style.css">
+<style>
+
+body{font-family:Arial;margin:0;background:#f4f6fb}
+
+.layout{display:flex}
+
+.sidebar{
+width:220px;
+background:white;
+padding:20px;
+border-right:1px solid #ddd;
+}
+
+.sidebar a{
+display:block;
+padding:10px;
+text-decoration:none;
+color:#333;
+margin-bottom:6px;
+}
+
+.workspace{
+flex:1;
+padding:30px;
+}
+
+.upload{
+border:2px dashed #aaa;
+padding:40px;
+text-align:center;
+background:white;
+border-radius:10px;
+cursor:pointer;
+}
+
+.progress{
+height:8px;
+background:#eee;
+margin-top:20px;
+}
+
+.progress div{
+height:100%;
+background:#4f46e5;
+width:0%;
+}
+
+.result{
+margin-top:20px;
+background:white;
+padding:20px;
+border-radius:10px;
+}
+
+.ads{
+width:300px;
+background:white;
+padding:20px;
+border-left:1px solid #ddd;
+}
+
+.adbox{
+background:#eee;
+height:250px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+</style>
 
 </head>
 
@@ -17,53 +84,37 @@
 
 <div class="sidebar">
 
-<h2>Image Tools</h2>
+<h3>Tools</h3>
 
 <a href="jpg-to-webp.html">JPG → WebP</a>
 <a href="png-to-jpg.html">PNG → JPG</a>
-<a href="image-compressor.html">Image Compressor</a>
-<a href="image-resizer.html">Image Resizer</a>
-<a href="image-rotate.html">Rotate Image</a>
-<a href="image-crop.html">Crop Image</a>
-<a href="image-base64.html">Image → Base64</a>
+<a href="compress.html">Compress</a>
+<a href="resize.html">Resize</a>
+<a href="rotate.html">Rotate</a>
+<a href="crop.html">Crop</a>
+<a href="base64.html">Base64</a>
 
 </div>
 
 <div class="workspace">
 
-<div class="top-ad">
-Ad Space
-</div>
+<h1>JPG → WebP Converter</h1>
 
-<h1>JPG to WebP Converter</h1>
+<div id="upload" class="upload">
 
-<div class="description">
-
-<p>
-Upload a JPG image to convert it into WebP format.
-</p>
+Drag & Drop JPG Here
 
 </div>
 
-<div id="upload-area" class="upload-area">
+<div id="info"></div>
 
-Drag & Drop Image
+<div class="progress">
 
-</div>
-
-<div id="upload-status"></div>
-
-<div class="progress-bar">
-
-<div id="progress"></div>
+<div id="bar"></div>
 
 </div>
 
-<div id="result"></div>
-
-<div class="result-ad">
-Ad Space
-</div>
+<div id="result" class="result"></div>
 
 </div>
 
@@ -71,7 +122,7 @@ Ad Space
 
 <h3>Advertisement</h3>
 
-<div class="ad-box">
+<div class="adbox">
 Ad Space
 </div>
 
@@ -79,19 +130,50 @@ Ad Space
 
 </div>
 
-<footer>
-
-<a href="../about.html">About</a> |
-<a href="../privacy.html">Privacy</a> |
-<a href="../contact.html">Contact</a>
-
-</footer>
-
-<script src="../js/tool-ui.js"></script>
-
 <script>
 
-setupTool("upload-area",function(file){
+function formatSize(bytes){
+let kb=bytes/1024
+if(kb<1024) return kb.toFixed(2)+" KB"
+return (kb/1024).toFixed(2)+" MB"
+}
+
+let upload=document.getElementById("upload")
+
+upload.addEventListener("dragover",e=>e.preventDefault())
+
+upload.addEventListener("drop",function(e){
+
+e.preventDefault()
+
+let file=e.dataTransfer.files[0]
+
+process(file)
+
+})
+
+upload.onclick=function(){
+
+let input=document.createElement("input")
+
+input.type="file"
+
+input.onchange=function(){
+process(input.files[0])
+}
+
+input.click()
+
+}
+
+function process(file){
+
+document.getElementById("info").innerHTML=
+
+"Uploaded: "+file.name+
+"<br>Input Size: "+formatSize(file.size)
+
+document.getElementById("bar").style.width="30%"
 
 let img=new Image()
 
@@ -110,24 +192,25 @@ ctx.drawImage(img,0,0)
 
 canvas.toBlob(function(blob){
 
-let size=blob.size
+document.getElementById("bar").style.width="100%"
 
 let url=URL.createObjectURL(blob)
 
 document.getElementById("result").innerHTML=
 
-"<p>Output File: converted.webp</p>"+
-"<p>Output Size: "+(size/1024).toFixed(2)+" KB</p>"+
+"<h3>Conversion Complete</h3>"+
+"Output: converted.webp"+
+"<br>Output Size: "+formatSize(blob.size)+
+"<br><br><img src='"+url+"' width='250'><br><br>"+
 "<a href='"+url+"' download='converted.webp'>Download</a>"
 
 },"image/webp")
 
 }
 
-})
+}
 
 </script>
 
 </body>
-
 </html>
