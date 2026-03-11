@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Image to Base64</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<h1>Image → Base64</h1>
+
+<div id="drop" class="drop">Drop Image</div>
+
+<script src="../js/core.js"></script>
+
+<script>
+
+setupDrop("drop", function(file){
+
+let reader = new FileReader();
+
+reader.onload = function(){
+
+let textarea = document.createElement("textarea");
+
+textarea.style.width = "80%";
+textarea.style.height = "200px";
+
+textarea.value = reader.result;
+
+document.body.appendChild(textarea);
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+</script>
+
+</body>
+</html>
