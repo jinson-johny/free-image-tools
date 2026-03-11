@@ -1,44 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>JPG to WebP</title>
+<title>PNG to JPG</title>
 <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
 
-<h1>JPG → WebP</h1>
+<h1>PNG → JPG Converter</h1>
 
-<div id="drop" class="drop">Drop JPG</div>
+<div id="drop" class="drop">Drop PNG</div>
 
 <script src="../js/core.js"></script>
 
 <script>
 
-setupDrop("drop",function(file){
+setupDrop("drop", function(file){
 
-let img=new Image();
-img.src=URL.createObjectURL(file);
+let img = new Image();
+img.src = URL.createObjectURL(file);
 
-img.onload=function(){
+img.onload = function(){
 
-let canvas=document.createElement("canvas");
-canvas.width=img.width;
-canvas.height=img.height;
+let canvas = document.createElement("canvas");
 
-let ctx=canvas.getContext("2d");
+canvas.width = img.width;
+canvas.height = img.height;
+
+let ctx = canvas.getContext("2d");
+
+ctx.fillStyle = "#ffffff";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
 ctx.drawImage(img,0,0);
 
 canvas.toBlob(function(blob){
 
-let a=document.createElement("a");
-a.href=URL.createObjectURL(blob);
-a.download="image.webp";
-a.innerText="Download";
+let a = document.createElement("a");
+
+a.href = URL.createObjectURL(blob);
+a.download = "image.jpg";
+a.innerText = "Download JPG";
 
 document.body.appendChild(a);
 
-},"image/webp");
+},"image/jpeg");
 
 };
 
