@@ -6,7 +6,7 @@
 
 <title>PNG to JPG Converter</title>
 
-<meta name="description" content="Convert PNG images to JPG instantly online.">
+<meta name="description" content="Convert PNG images to JPG format online instantly and download the optimized image.">
 
 <style>
 
@@ -20,7 +20,7 @@ background:#f4f6fb;
 display:flex;
 }
 
-/* LEFT TOOL MENU */
+/* LEFT MENU */
 
 .sidebar{
 width:220px;
@@ -46,7 +46,7 @@ margin-bottom:6px;
 background:#eef2ff;
 }
 
-/* MAIN WORKSPACE */
+/* WORKSPACE */
 
 .workspace{
 flex:1;
@@ -80,8 +80,6 @@ height:100%;
 background:#4f46e5;
 width:0%;
 }
-
-/* RESULT BOX */
 
 .result{
 margin-top:20px;
@@ -141,11 +139,11 @@ text-decoration:none;
 
 <a href="jpg-to-webp.html">JPG → WebP</a>
 <a href="png-to-jpg.html">PNG → JPG</a>
-<a href="compress.html">Compress Image</a>
-<a href="resize.html">Resize Image</a>
-<a href="rotate.html">Rotate Image</a>
-<a href="crop.html">Crop Image</a>
-<a href="base64.html">Image → Base64</a>
+<a href="image-compressor.html">Compress Image</a>
+<a href="image-resizer.html">Resize Image</a>
+<a href="image-rotate.html">Rotate Image</a>
+<a href="image-crop.html">Crop Image</a>
+<a href="image-base64.html">Image → Base64</a>
 
 </div>
 
@@ -153,11 +151,11 @@ text-decoration:none;
 
 <div class="workspace">
 
-<h1>PNG → JPG Converter</h1>
+<h1>PNG to JPG Converter</h1>
 
 <p>
 Upload a PNG image to convert it into JPG format.
-All processing happens directly in your browser.
+Conversion happens locally in your browser for privacy.
 </p>
 
 <div id="upload" class="upload">
@@ -170,16 +168,14 @@ or Click to Upload
 <div id="info"></div>
 
 <div class="progress">
-
 <div id="bar"></div>
-
 </div>
 
 <div id="result" class="result"></div>
 
 </div>
 
-<!-- RIGHT ADS -->
+<!-- ADS -->
 
 <div class="ads">
 
@@ -205,8 +201,6 @@ Ad Space (300x250)
 
 <script>
 
-/* FORMAT FILE SIZE */
-
 function formatSize(bytes){
 
 let kb = bytes / 1024
@@ -218,9 +212,6 @@ return kb.toFixed(2) + " KB"
 return (kb/1024).toFixed(2) + " MB"
 
 }
-
-
-/* UPLOAD HANDLING */
 
 let upload = document.getElementById("upload")
 
@@ -236,16 +227,14 @@ processFile(file)
 
 })
 
-
 upload.onclick = function(){
 
 let input = document.createElement("input")
 
-input.type = "file"
+input.type="file"
+input.accept="image/png"
 
-input.accept = "image/png"
-
-input.onchange = function(){
+input.onchange=function(){
 
 processFile(input.files[0])
 
@@ -255,71 +244,58 @@ input.click()
 
 }
 
-
-/* PROCESS IMAGE */
-
 function processFile(file){
 
-document.getElementById("info").innerHTML =
+document.getElementById("info").innerHTML=
 
-"<p><b>Uploaded File:</b> " + file.name + "</p>" +
+"<p><b>Uploaded File:</b> "+file.name+"</p>"+
+"<p><b>Input Size:</b> "+formatSize(file.size)+"</p>"
 
-"<p><b>Input Size:</b> " + formatSize(file.size) + "</p>"
+document.getElementById("bar").style.width="30%"
 
+let img=new Image()
 
-document.getElementById("bar").style.width = "30%"
+img.src=URL.createObjectURL(file)
 
+img.onload=function(){
 
-let img = new Image()
+let canvas=document.createElement("canvas")
 
-img.src = URL.createObjectURL(file)
+canvas.width=img.width
+canvas.height=img.height
 
+let ctx=canvas.getContext("2d")
 
-img.onload = function(){
+/* PNG transparency becomes white background */
 
-let canvas = document.createElement("canvas")
-
-canvas.width = img.width
-
-canvas.height = img.height
-
-
-let ctx = canvas.getContext("2d")
-
-/* JPG needs white background */
-
-ctx.fillStyle = "#ffffff"
-
+ctx.fillStyle="#ffffff"
 ctx.fillRect(0,0,canvas.width,canvas.height)
 
 ctx.drawImage(img,0,0)
 
-
 canvas.toBlob(function(blob){
 
-document.getElementById("bar").style.width = "100%"
+document.getElementById("bar").style.width="100%"
 
+let url=URL.createObjectURL(blob)
 
-let url = URL.createObjectURL(blob)
+let outputSize=formatSize(blob.size)
 
-let outputSize = formatSize(blob.size)
+document.getElementById("result").innerHTML=
 
+"<h3>Conversion Complete</h3>"+
 
-document.getElementById("result").innerHTML =
+"<p><b>Output File:</b> converted.jpg</p>"+
 
-"<h3>Conversion Complete</h3>" +
+"<p><b>Output Size:</b> "+outputSize+"</p>"+
 
-"<p><b>Output File:</b> converted.jpg</p>" +
+"<br><img src='"+url+"' style='max-width:300px;border-radius:6px'>"+
 
-"<p><b>Output Size:</b> " + outputSize + "</p>" +
-
-"<br><img src='"+url+"' style='max-width:300px;border-radius:6px'>" +
-
-"<br><br>" +
+"<br><br>"+
 
 "<a href='"+url+"' download='converted.jpg'>Download Image</a>"
 
-},"image/jpeg")
+},"image/jpeg",0.9)
 
 }
 
