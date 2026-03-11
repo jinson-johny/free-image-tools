@@ -1,59 +1,40 @@
 body{
-
 font-family:Arial;
-margin:0;
 background:#f3f4f6;
 text-align:center;
-
+margin:0;
 }
 
 header{
-
 background:linear-gradient(135deg,#6366f1,#9333ea);
 color:white;
 padding:50px;
-
 }
 
-.tool-grid{
-
+.grid{
 display:flex;
 flex-wrap:wrap;
-justify-content:center;
 gap:20px;
+justify-content:center;
 margin-top:40px;
-
 }
 
-.tool-card{
-
+.grid a{
 background:white;
 padding:20px;
 width:200px;
-border-radius:12px;
+border-radius:10px;
 text-decoration:none;
 color:black;
 font-weight:bold;
-
-box-shadow:0 8px 20px rgba(0,0,0,0.1);
-
-}
-
-.tool-card:hover{
-
-transform:translateY(-5px);
-
+box-shadow:0 6px 15px rgba(0,0,0,0.1);
 }
 
 .drop{
-
 border:2px dashed #6366f1;
 padding:40px;
-margin-top:40px;
+margin:40px auto;
 width:400px;
-margin-left:auto;
-margin-right:auto;
 border-radius:10px;
 cursor:pointer;
-
 }
