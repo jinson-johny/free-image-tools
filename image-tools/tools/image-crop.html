@@ -1,38 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Crop Image</title>
 <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
 
-<h1>Crop Image (Center)</h1>
+<div class="layout">
 
-<div id="drop" class="drop">Drop Image</div>
+<div class="sidebar">
+
+<h2>Tools</h2>
+
+<a href="jpg-to-webp.html">JPG → WebP</a>
+<a href="png-to-jpg.html">PNG → JPG</a>
+<a href="webp-to-jpg.html">WebP → JPG</a>
+<a href="image-compressor.html">Image Compressor</a>
+<a href="image-resizer.html">Image Resizer</a>
+<a href="image-rotate.html">Rotate Image</a>
+<a href="image-crop.html">Crop Image</a>
+<a href="image-base64.html">Image → Base64</a>
+
+</div>
+
+
+<div class="workspace">
+
+<h1>Image Crop Tool</h1>
+
+<div class="description">
+
+<p>This tool crops the center square of your image.</p>
+
+<ul>
+<li>Input: JPG / PNG / WebP</li>
+<li>Output: Cropped JPG</li>
+<li>Square crop generated automatically</li>
+</ul>
+
+</div>
+
+<div class="upload-area">
+Drag & Drop Image
+</div>
+
+<div id="output"></div>
+
+</div>
+
+
+<div class="ads">
+
+<h3>Advertisement</h3>
+<p>Ad space</p>
+
+</div>
+
+</div>
 
 <script src="../js/core.js"></script>
 
 <script>
 
-setupDrop("drop", function(file){
+setupUpload(".upload-area",function(file){
 
-let img = new Image();
+let img=new Image()
 
-img.src = URL.createObjectURL(file);
+img.src=URL.createObjectURL(file)
 
-img.onload = function(){
+img.onload=function(){
 
-let size = Math.min(img.width,img.height);
+let size=Math.min(img.width,img.height)
 
-let canvas = document.createElement("canvas");
+let canvas=document.createElement("canvas")
 
-canvas.width = size;
-canvas.height = size;
+canvas.width=size
+canvas.height=size
 
-let ctx = canvas.getContext("2d");
+let ctx=canvas.getContext("2d")
 
 ctx.drawImage(
+
 img,
 (img.width-size)/2,
 (img.height-size)/2,
@@ -42,23 +92,26 @@ size,
 0,
 size,
 size
-);
+
+)
 
 canvas.toBlob(function(blob){
 
-let a = document.createElement("a");
+let link=document.createElement("a")
 
-a.href = URL.createObjectURL(blob);
-a.download = "cropped.jpg";
-a.innerText = "Download";
+link.href=URL.createObjectURL(blob)
 
-document.body.appendChild(a);
+link.download="cropped.jpg"
 
-});
+link.innerText="Download Cropped Image"
 
-};
+document.getElementById("output").appendChild(link)
 
-});
+})
+
+}
+
+})
 
 </script>
 
