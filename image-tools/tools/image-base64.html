@@ -1,40 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Image to Base64</title>
 <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
 
-<h1>Image → Base64</h1>
+<div class="layout">
 
-<div id="drop" class="drop">Drop Image</div>
+<div class="sidebar">
+
+<h2>Tools</h2>
+
+<a href="jpg-to-webp.html">JPG → WebP</a>
+<a href="png-to-jpg.html">PNG → JPG</a>
+<a href="webp-to-jpg.html">WebP → JPG</a>
+<a href="image-compressor.html">Image Compressor</a>
+<a href="image-resizer.html">Image Resizer</a>
+<a href="image-rotate.html">Rotate Image</a>
+<a href="image-crop.html">Crop Image</a>
+<a href="image-base64.html">Image → Base64</a>
+
+</div>
+
+
+<div class="workspace">
+
+<h1>Image to Base64 Converter</h1>
+
+<div class="description">
+
+<p>Convert any image into Base64 string format.</p>
+
+<ul>
+<li>Input: JPG / PNG / WebP</li>
+<li>Output: Base64 encoded string</li>
+<li>Useful for embedding images in HTML or CSS</li>
+</ul>
+
+</div>
+
+<div class="upload-area">
+Drag Image Here
+</div>
+
+<div id="output"></div>
+
+</div>
+
+
+<div class="ads">
+
+<h3>Advertisement</h3>
+<p>Ad space</p>
+
+</div>
+
+</div>
 
 <script src="../js/core.js"></script>
 
 <script>
 
-setupDrop("drop", function(file){
+setupUpload(".upload-area",function(file){
 
-let reader = new FileReader();
+let reader=new FileReader()
 
-reader.onload = function(){
+reader.onload=function(){
 
-let textarea = document.createElement("textarea");
+let textarea=document.createElement("textarea")
 
-textarea.style.width = "80%";
-textarea.style.height = "200px";
+textarea.style.width="100%"
+textarea.style.height="200px"
 
-textarea.value = reader.result;
+textarea.value=reader.result
 
-document.body.appendChild(textarea);
+document.getElementById("output").appendChild(textarea)
 
-};
+}
 
-reader.readAsDataURL(file);
+reader.readAsDataURL(file)
 
-});
+})
 
 </script>
 
