@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Crop Image</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<h1>Crop Image (Center)</h1>
+
+<div id="drop" class="drop">Drop Image</div>
+
+<script src="../js/core.js"></script>
+
+<script>
+
+setupDrop("drop", function(file){
+
+let img = new Image();
+
+img.src = URL.createObjectURL(file);
+
+img.onload = function(){
+
+let size = Math.min(img.width,img.height);
+
+let canvas = document.createElement("canvas");
+
+canvas.width = size;
+canvas.height = size;
+
+let ctx = canvas.getContext("2d");
+
+ctx.drawImage(
+img,
+(img.width-size)/2,
+(img.height-size)/2,
+size,
+size,
+0,
+0,
+size,
+size
+);
+
+canvas.toBlob(function(blob){
+
+let a = document.createElement("a");
+
+a.href = URL.createObjectURL(blob);
+a.download = "cropped.jpg";
+a.innerText = "Download";
+
+document.body.appendChild(a);
+
+});
+
+};
+
+});
+
+</script>
+
+</body>
+</html>
