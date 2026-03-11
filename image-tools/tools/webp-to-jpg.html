@@ -1,49 +1,97 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>WebP to JPG</title>
 <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
 
-<h1>WebP → JPG</h1>
+<div class="layout">
 
-<div id="drop" class="drop">Drop WebP</div>
+<div class="sidebar">
+
+<h2>Tools</h2>
+
+<a href="jpg-to-webp.html">JPG → WebP</a>
+<a href="png-to-jpg.html">PNG → JPG</a>
+<a href="webp-to-jpg.html">WebP → JPG</a>
+<a href="image-compressor.html">Image Compressor</a>
+<a href="image-resizer.html">Image Resizer</a>
+<a href="image-rotate.html">Rotate Image</a>
+<a href="image-crop.html">Crop Image</a>
+<a href="image-base64.html">Image → Base64</a>
+
+</div>
+
+<div class="workspace">
+
+<h1>WebP to JPG Converter</h1>
+
+<div class="description">
+
+<p>Convert modern WebP images into JPG format.</p>
+
+<ul>
+<li>Input: WebP</li>
+<li>Output: JPG</li>
+<li>Processing happens locally</li>
+</ul>
+
+</div>
+
+<div class="upload-area">
+Drop WebP Image
+</div>
+
+<div id="output"></div>
+
+</div>
+
+<div class="ads">
+<h3>Advertisement</h3>
+<p>Ad space</p>
+</div>
+
+</div>
 
 <script src="../js/core.js"></script>
 
 <script>
 
-setupDrop("drop", function(file){
+setupUpload(".upload-area",function(file){
 
-let img = new Image();
-img.src = URL.createObjectURL(file);
+let img=new Image();
 
-img.onload = function(){
+img.src=URL.createObjectURL(file);
 
-let canvas = document.createElement("canvas");
+img.onload=function(){
 
-canvas.width = img.width;
-canvas.height = img.height;
+let canvas=document.createElement("canvas");
 
-let ctx = canvas.getContext("2d");
+canvas.width=img.width;
+canvas.height=img.height;
+
+let ctx=canvas.getContext("2d");
 
 ctx.drawImage(img,0,0);
 
 canvas.toBlob(function(blob){
 
-let a = document.createElement("a");
+let link=document.createElement("a");
 
-a.href = URL.createObjectURL(blob);
-a.download = "image.jpg";
-a.innerText = "Download JPG";
+link.href=URL.createObjectURL(blob);
 
-document.body.appendChild(a);
+link.download="image.jpg";
+
+link.innerText="Download JPG";
+
+document.getElementById("output").appendChild(link);
 
 },"image/jpeg");
 
-};
+}
 
 });
 
