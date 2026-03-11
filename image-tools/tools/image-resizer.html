@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Image Resizer</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<h1>Image Resizer</h1>
+
+<input id="width" placeholder="Width">
+<input id="height" placeholder="Height">
+
+<div id="drop" class="drop">Drop Image</div>
+
+<script src="../js/core.js"></script>
+
+<script>
+
+setupDrop("drop", function(file){
+
+let img = new Image();
+
+img.src = URL.createObjectURL(file);
+
+img.onload = function(){
+
+let w = document.getElementById("width").value;
+let h = document.getElementById("height").value;
+
+let canvas = document.createElement("canvas");
+
+canvas.width = w;
+canvas.height = h;
+
+let ctx = canvas.getContext("2d");
+
+ctx.drawImage(img,0,0,w,h);
+
+canvas.toBlob(function(blob){
+
+let a = document.createElement("a");
+
+a.href = URL.createObjectURL(blob);
+a.download = "resized.jpg";
+a.innerText = "Download";
+
+document.body.appendChild(a);
+
+},"image/jpeg");
+
+};
+
+});
+
+</script>
+
+</body>
+</html>
