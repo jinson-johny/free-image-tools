@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>WebP to JPG</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<h1>WebP → JPG</h1>
+
+<div id="drop" class="drop">Drop WebP</div>
+
+<script src="../js/core.js"></script>
+
+<script>
+
+setupDrop("drop", function(file){
+
+let img = new Image();
+img.src = URL.createObjectURL(file);
+
+img.onload = function(){
+
+let canvas = document.createElement("canvas");
+
+canvas.width = img.width;
+canvas.height = img.height;
+
+let ctx = canvas.getContext("2d");
+
+ctx.drawImage(img,0,0);
+
+canvas.toBlob(function(blob){
+
+let a = document.createElement("a");
+
+a.href = URL.createObjectURL(blob);
+a.download = "image.jpg";
+a.innerText = "Download JPG";
+
+document.body.appendChild(a);
+
+},"image/jpeg");
+
+};
+
+});
+
+</script>
+
+</body>
+</html>
