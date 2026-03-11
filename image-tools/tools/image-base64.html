@@ -1,89 +1,335 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
-<title>Image to Base64</title>
-<link rel="stylesheet" href="../css/style.css">
+
+<title>Image to Base64 Converter</title>
+
+<meta name="description" content="Convert images to Base64 string instantly online.">
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+background:#f4f6fb;
+}
+
+.layout{
+display:flex;
+}
+
+/* LEFT MENU */
+
+.sidebar{
+width:220px;
+background:white;
+padding:20px;
+border-right:1px solid #ddd;
+}
+
+.sidebar h3{
+margin-top:0;
+}
+
+.sidebar a{
+display:block;
+padding:10px;
+text-decoration:none;
+color:#333;
+border-radius:6px;
+margin-bottom:6px;
+}
+
+.sidebar a:hover{
+background:#eef2ff;
+}
+
+/* WORKSPACE */
+
+.workspace{
+flex:1;
+padding:30px;
+}
+
+.upload{
+border:2px dashed #aaa;
+padding:40px;
+text-align:center;
+background:white;
+border-radius:10px;
+cursor:pointer;
+font-size:16px;
+}
+
+.upload:hover{
+background:#f0f4ff;
+}
+
+.progress{
+height:8px;
+background:#eee;
+margin-top:20px;
+border-radius:5px;
+overflow:hidden;
+}
+
+.progress div{
+height:100%;
+background:#4f46e5;
+width:0%;
+}
+
+/* RESULT */
+
+.result{
+margin-top:20px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+textarea{
+width:100%;
+height:200px;
+margin-top:10px;
+}
+
+/* ADS */
+
+.ads{
+width:300px;
+background:white;
+padding:20px;
+border-left:1px solid #ddd;
+}
+
+.adbox{
+background:#eee;
+height:250px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:8px;
+}
+
+/* FOOTER */
+
+footer{
+background:#111;
+color:white;
+padding:15px;
+text-align:center;
+margin-top:40px;
+}
+
+footer a{
+color:white;
+margin:0 10px;
+text-decoration:none;
+}
+
+button{
+padding:10px 16px;
+border:none;
+background:#4f46e5;
+color:white;
+border-radius:6px;
+cursor:pointer;
+margin-top:10px;
+}
+
+button:hover{
+background:#3730a3;
+}
+
+</style>
+
 </head>
 
 <body>
 
 <div class="layout">
 
+<!-- SIDEBAR -->
+
 <div class="sidebar">
 
-<h2>Tools</h2>
+<h3>Image Tools</h3>
 
 <a href="jpg-to-webp.html">JPG → WebP</a>
 <a href="png-to-jpg.html">PNG → JPG</a>
-<a href="webp-to-jpg.html">WebP → JPG</a>
-<a href="image-compressor.html">Image Compressor</a>
-<a href="image-resizer.html">Image Resizer</a>
-<a href="image-rotate.html">Rotate Image</a>
-<a href="image-crop.html">Crop Image</a>
+<a href="compress.html">Compress Image</a>
+<a href="resize.html">Resize Image</a>
+<a href="rotate.html">Rotate Image</a>
+<a href="crop.html">Crop Image</a>
 <a href="image-base64.html">Image → Base64</a>
 
 </div>
 
+<!-- WORKSPACE -->
 
 <div class="workspace">
 
-<h1>Image to Base64 Converter</h1>
+<h1>Image → Base64 Converter</h1>
 
-<div class="description">
+<p>
+Upload an image to generate its Base64 encoded string.
+This is useful for embedding images directly into HTML or CSS.
+</p>
 
-<p>Convert any image into Base64 string format.</p>
+<div id="upload" class="upload">
 
-<ul>
-<li>Input: JPG / PNG / WebP</li>
-<li>Output: Base64 encoded string</li>
-<li>Useful for embedding images in HTML or CSS</li>
-</ul>
-
-</div>
-
-<div class="upload-area">
-Drag Image Here
-</div>
-
-<div id="output"></div>
+Drag & Drop Image Here  
+or Click to Upload
 
 </div>
 
+<div id="info"></div>
+
+<div class="progress">
+<div id="bar"></div>
+</div>
+
+<div id="result" class="result"></div>
+
+</div>
+
+<!-- ADS -->
 
 <div class="ads">
 
 <h3>Advertisement</h3>
-<p>Ad space</p>
+
+<div class="adbox">
+
+Ad Space (300x250)
 
 </div>
 
 </div>
 
-<script src="../js/core.js"></script>
+</div>
+
+<footer>
+
+<a href="../about.html">About</a>
+<a href="../privacy.html">Privacy</a>
+<a href="../contact.html">Contact</a>
+
+</footer>
 
 <script>
 
-setupUpload(".upload-area",function(file){
+/* FORMAT SIZE */
 
-let reader=new FileReader()
+function formatSize(bytes){
 
-reader.onload=function(){
+let kb = bytes / 1024
 
-let textarea=document.createElement("textarea")
+if(kb < 1024){
+return kb.toFixed(2) + " KB"
+}
 
-textarea.style.width="100%"
-textarea.style.height="200px"
+return (kb/1024).toFixed(2) + " MB"
 
-textarea.value=reader.result
+}
 
-document.getElementById("output").appendChild(textarea)
+
+/* UPLOAD AREA */
+
+let upload = document.getElementById("upload")
+
+upload.addEventListener("dragover", e => e.preventDefault())
+
+upload.addEventListener("drop", function(e){
+
+e.preventDefault()
+
+let file = e.dataTransfer.files[0]
+
+processFile(file)
+
+})
+
+
+upload.onclick = function(){
+
+let input = document.createElement("input")
+
+input.type = "file"
+
+input.accept = "image/*"
+
+input.onchange = function(){
+
+processFile(input.files[0])
+
+}
+
+input.click()
+
+}
+
+
+/* PROCESS FILE */
+
+function processFile(file){
+
+document.getElementById("info").innerHTML =
+
+"<p><b>Uploaded File:</b> " + file.name + "</p>" +
+
+"<p><b>Input Size:</b> " + formatSize(file.size) + "</p>"
+
+
+document.getElementById("bar").style.width = "40%"
+
+
+let reader = new FileReader()
+
+reader.onload = function(){
+
+document.getElementById("bar").style.width = "100%"
+
+
+let base64 = reader.result
+
+
+document.getElementById("result").innerHTML =
+
+"<h3>Base64 Generated</h3>" +
+
+"<img src='"+base64+"' style='max-width:300px;border-radius:6px'><br><br>" +
+
+"<textarea id='base64text'>"+base64+"</textarea>" +
+
+"<br>" +
+
+"<button onclick='copyBase64()'>Copy Base64</button>"
 
 }
 
 reader.readAsDataURL(file)
 
-})
+}
+
+
+/* COPY BUTTON */
+
+function copyBase64(){
+
+let text = document.getElementById("base64text")
+
+text.select()
+
+document.execCommand("copy")
+
+alert("Base64 copied to clipboard")
+
+}
 
 </script>
 
