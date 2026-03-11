@@ -1,95 +1,129 @@
 body{
-
-font-family:Arial;
+font-family:Arial, sans-serif;
 margin:0;
-background:#f4f6f8;
-
+background:#f4f6fb;
 }
+
+/* LAYOUT */
 
 .layout{
-
-display:grid;
-
-grid-template-columns:220px 1fr 260px;
-
+display:flex;
 min-height:100vh;
-
 }
 
+/* SIDEBAR */
+
 .sidebar{
-
-background:#1e293b;
-color:white;
+width:230px;
+background:linear-gradient(180deg,#6a5af9,#8b5cf6);
 padding:20px;
+color:white;
+}
 
+.sidebar h3{
+margin-top:0;
+margin-bottom:20px;
 }
 
 .sidebar a{
-
 display:block;
-padding:10px;
-background:#334155;
-margin:6px 0;
-border-radius:6px;
-color:white;
+padding:12px;
+margin-bottom:10px;
+border-radius:8px;
 text-decoration:none;
-
+color:white;
+font-weight:500;
+transition:0.2s;
 }
+
+.sidebar a:nth-child(2){background:#ff6b6b;}
+.sidebar a:nth-child(3){background:#ff9f43;}
+.sidebar a:nth-child(4){background:#1dd1a1;}
+.sidebar a:nth-child(5){background:#54a0ff;}
+.sidebar a:nth-child(6){background:#5f27cd;}
+.sidebar a:nth-child(7){background:#ee5253;}
+.sidebar a:nth-child(8){background:#10ac84;}
+.sidebar a:nth-child(9){background:#2e86de;}
+
+.sidebar a:hover{
+transform:scale(1.05);
+}
+
+/* WORKSPACE */
 
 .workspace{
-
+flex:1;
 padding:40px;
-
 }
 
-.upload-area{
-
-border:2px dashed #6366f1;
+.upload{
+border:2px dashed #bbb;
 padding:40px;
 text-align:center;
-cursor:pointer;
-border-radius:10px;
 background:white;
-
+border-radius:10px;
+cursor:pointer;
 }
 
-.progress-bar{
-
-width:100%;
-height:8px;
-background:#ddd;
-margin-top:15px;
-
+.upload:hover{
+background:#f0f4ff;
 }
 
-#progress{
+/* RESULT */
 
+.result{
+margin-top:20px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* PROGRESS */
+
+.progress{
 height:8px;
+background:#eee;
+margin-top:20px;
+border-radius:5px;
+overflow:hidden;
+}
+
+.progress div{
+height:100%;
+background:#6a5af9;
 width:0%;
-background:#22c55e;
-
 }
 
-.top-ad{
-
-background:#e5e7eb;
-padding:15px;
-text-align:center;
-margin-bottom:20px;
-
-}
+/* ADS */
 
 .ads{
-
+width:300px;
 padding:20px;
-background:#f1f5f9;
-
+border-left:1px solid #ddd;
+background:white;
 }
 
+.adbox{
+height:250px;
+background:#eee;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:8px;
+}
+
+/* FOOTER */
+
 footer{
-
-padding:20px;
+background:#111;
+color:white;
 text-align:center;
-background:#e2e8f0;
+padding:15px;
+}
 
+footer a{
+color:white;
+margin:0 10px;
+text-decoration:none;
 }
