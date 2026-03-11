@@ -1,46 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>JPG to WebP</title>
+<meta charset="UTF-8">
+<title>JPG to WebP Converter</title>
 <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
 
-<h1>JPG → WebP</h1>
+<div class="layout">
 
-<div id="drop" class="drop">Drop JPG</div>
+<div class="sidebar">
+
+<h2>Tools</h2>
+
+<a href="jpg-to-webp.html">JPG → WebP</a>
+<a href="png-to-jpg.html">PNG → JPG</a>
+<a href="webp-to-jpg.html">WebP → JPG</a>
+<a href="image-compressor.html">Image Compressor</a>
+<a href="image-resizer.html">Image Resizer</a>
+<a href="image-rotate.html">Rotate Image</a>
+<a href="image-crop.html">Crop Image</a>
+<a href="image-base64.html">Image → Base64</a>
+
+</div>
+
+<div class="workspace">
+
+<h1>JPG to WebP Converter</h1>
+
+<div class="description">
+
+<p>Convert JPG images into WebP format to reduce size while keeping quality.</p>
+
+<ul>
+<li>Input: JPG / JPEG</li>
+<li>Recommended max size: 10MB</li>
+<li>Processing happens locally in your browser</li>
+</ul>
+
+</div>
+
+<div class="upload-area">
+Drag & Drop JPG Image or Click
+</div>
+
+<div id="output"></div>
+
+</div>
+
+<div class="ads">
+
+<h3>Advertisement</h3>
+
+<p>Ad space</p>
+
+</div>
+
+</div>
 
 <script src="../js/core.js"></script>
 
 <script>
 
-setupDrop("drop",function(file){
+setupUpload(".upload-area",function(file){
 
 let img=new Image();
+
 img.src=URL.createObjectURL(file);
 
 img.onload=function(){
 
 let canvas=document.createElement("canvas");
+
 canvas.width=img.width;
 canvas.height=img.height;
 
 let ctx=canvas.getContext("2d");
+
 ctx.drawImage(img,0,0);
 
 canvas.toBlob(function(blob){
 
-let a=document.createElement("a");
-a.href=URL.createObjectURL(blob);
-a.download="image.webp";
-a.innerText="Download";
+let link=document.createElement("a");
 
-document.body.appendChild(a);
+link.href=URL.createObjectURL(blob);
+
+link.download="converted.webp";
+
+link.innerText="Download WebP";
+
+document.getElementById("output").appendChild(link);
 
 },"image/webp");
 
-};
+}
 
 });
 
