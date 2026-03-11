@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="UTF-8">
+
 <title>JPG to WebP Converter</title>
+
 <link rel="stylesheet" href="../css/style.css">
+
 </head>
 
 <body>
@@ -12,11 +17,10 @@
 
 <div class="sidebar">
 
-<h2>Tools</h2>
+<h2>Image Tools</h2>
 
 <a href="jpg-to-webp.html">JPG → WebP</a>
 <a href="png-to-jpg.html">PNG → JPG</a>
-<a href="webp-to-jpg.html">WebP → JPG</a>
 <a href="image-compressor.html">Image Compressor</a>
 <a href="image-resizer.html">Image Resizer</a>
 <a href="image-rotate.html">Rotate Image</a>
@@ -27,25 +31,39 @@
 
 <div class="workspace">
 
+<div class="top-ad">
+Ad Space
+</div>
+
 <h1>JPG to WebP Converter</h1>
 
 <div class="description">
 
-<p>Convert JPG images into WebP format to reduce size while keeping quality.</p>
-
-<ul>
-<li>Input: JPG / JPEG</li>
-<li>Recommended max size: 10MB</li>
-<li>Processing happens locally in your browser</li>
-</ul>
+<p>
+Upload a JPG image to convert it into WebP format.
+</p>
 
 </div>
 
-<div class="upload-area">
-Drag & Drop JPG Image or Click
+<div id="upload-area" class="upload-area">
+
+Drag & Drop Image
+
 </div>
 
-<div id="output"></div>
+<div id="upload-status"></div>
+
+<div class="progress-bar">
+
+<div id="progress"></div>
+
+</div>
+
+<div id="result"></div>
+
+<div class="result-ad">
+Ad Space
+</div>
 
 </div>
 
@@ -53,52 +71,63 @@ Drag & Drop JPG Image or Click
 
 <h3>Advertisement</h3>
 
-<p>Ad space</p>
-
+<div class="ad-box">
+Ad Space
 </div>
 
 </div>
 
-<script src="../js/core.js"></script>
+</div>
+
+<footer>
+
+<a href="../about.html">About</a> |
+<a href="../privacy.html">Privacy</a> |
+<a href="../contact.html">Contact</a>
+
+</footer>
+
+<script src="../js/tool-ui.js"></script>
 
 <script>
 
-setupUpload(".upload-area",function(file){
+setupTool("upload-area",function(file){
 
-let img=new Image();
+let img=new Image()
 
-img.src=URL.createObjectURL(file);
+img.src=URL.createObjectURL(file)
 
 img.onload=function(){
 
-let canvas=document.createElement("canvas");
+let canvas=document.createElement("canvas")
 
-canvas.width=img.width;
-canvas.height=img.height;
+canvas.width=img.width
+canvas.height=img.height
 
-let ctx=canvas.getContext("2d");
+let ctx=canvas.getContext("2d")
 
-ctx.drawImage(img,0,0);
+ctx.drawImage(img,0,0)
 
 canvas.toBlob(function(blob){
 
-let link=document.createElement("a");
+let size=blob.size
 
-link.href=URL.createObjectURL(blob);
+let url=URL.createObjectURL(blob)
 
-link.download="converted.webp";
+document.getElementById("result").innerHTML=
 
-link.innerText="Download WebP";
+"<p>Output File: converted.webp</p>"+
+"<p>Output Size: "+(size/1024).toFixed(2)+" KB</p>"+
+"<a href='"+url+"' download='converted.webp'>Download</a>"
 
-document.getElementById("output").appendChild(link);
-
-},"image/webp");
+},"image/webp")
 
 }
 
-});
+})
 
 </script>
 
 </body>
+
 </html>
