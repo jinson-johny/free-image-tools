@@ -1,22 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>JPG to WebP</title>
-
 <link rel="stylesheet" href="../css/style.css">
-
 </head>
 
 <body>
 
-<h1>JPG → WebP Converter</h1>
+<h1>JPG → WebP</h1>
 
-<div id="drop" class="drop">
-
-Drag JPG here or click
-
-</div>
+<div id="drop" class="drop">Drop JPG</div>
 
 <script src="../js/core.js"></script>
 
@@ -25,35 +18,29 @@ Drag JPG here or click
 setupDrop("drop",function(file){
 
 let img=new Image();
-
 img.src=URL.createObjectURL(file);
 
 img.onload=function(){
 
 let canvas=document.createElement("canvas");
-
 canvas.width=img.width;
 canvas.height=img.height;
 
 let ctx=canvas.getContext("2d");
-
 ctx.drawImage(img,0,0);
 
 canvas.toBlob(function(blob){
 
 let a=document.createElement("a");
-
 a.href=URL.createObjectURL(blob);
-
-a.download="converted.webp";
-
-a.innerText="Download WebP";
+a.download="image.webp";
+a.innerText="Download";
 
 document.body.appendChild(a);
 
 },"image/webp");
 
-}
+};
 
 });
 
