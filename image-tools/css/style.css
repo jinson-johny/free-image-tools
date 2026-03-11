@@ -1,0 +1,30 @@
+body{
+font-family: Arial;
+background:#f5f5f5;
+text-align:center;
+}
+
+header{
+padding:40px;
+}
+
+tools{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+}
+
+tool-card{
+background:white;
+padding:20px;
+border-radius:10px;
+width:200px;
+text-decoration:none;
+color:black;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+tool-card:hover{
+transform:scale(1.05);
+}
