@@ -1,32 +1,35 @@
-function setupDrop(id,callback){
+function setupUpload(areaId,callback){
 
-let area=document.getElementById(id);
+let area=document.querySelector(areaId);
 
-area.onclick=function(){
+area.addEventListener("click",()=>{
 
 let input=document.createElement("input");
+
 input.type="file";
 
-input.onchange=function(){
+input.onchange=()=>{
+
 callback(input.files[0]);
+
 };
 
 input.click();
 
-};
+});
 
-area.ondragover=function(e){
-e.preventDefault();
-};
-
-area.ondrop=function(e){
+area.addEventListener("dragover",(e)=>{
 
 e.preventDefault();
 
-let file=e.dataTransfer.files[0];
+});
 
-callback(file);
+area.addEventListener("drop",(e)=>{
 
-};
+e.preventDefault();
+
+callback(e.dataTransfer.files[0]);
+
+});
 
 }
