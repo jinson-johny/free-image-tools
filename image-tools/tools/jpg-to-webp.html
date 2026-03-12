@@ -26,10 +26,10 @@
 Drag & Drop JPG or Click to Upload
 </div>
 
-<div id="info"></div>
+<div id="upload-status"></div>
 
 <div class="progress">
-<div id="bar"></div>
+<div id="progress"></div>
 </div>
 
 <div id="result" class="result"></div>
@@ -56,6 +56,41 @@ Drag & Drop JPG or Click to Upload
 
 <script src="../js/layout.js"></script>
 <script src="../js/tool-ui.js"></script>
+
+<script>
+
+setupTool("upload", function(file){
+
+let img = new Image()
+
+img.onload = function(){
+
+let canvas=document.createElement("canvas")
+let ctx=canvas.getContext("2d")
+
+canvas.width=img.width
+canvas.height=img.height
+
+ctx.drawImage(img,0,0)
+
+canvas.toBlob(function(blob){
+
+let url=URL.createObjectURL(blob)
+
+document.getElementById("result").innerHTML =
+"<p>Output: "+file.name.replace('.jpg','.webp')+"</p>"+
+"<p>Size: "+formatSize(blob.size)+"</p>"+
+"<a href='"+url+"' download>Download WebP</a>"
+
+},"image/webp",0.9)
+
+}
+
+img.src = URL.createObjectURL(file)
+
+})
+
+</script>
 
 </body>
 </html>
