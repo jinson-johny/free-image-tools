@@ -8,6 +8,36 @@
 
 <link rel="stylesheet" href="../css/style.css">
 
+<style>
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:left;
+}
+
+th{
+background:#f4f4f4;
+}
+
+.download-btn{
+display:inline-block;
+margin-top:15px;
+padding:10px 18px;
+background:#4CAF50;
+color:white;
+text-decoration:none;
+border-radius:6px;
+}
+
+</style>
+
 </head>
 
 <body>
@@ -32,7 +62,7 @@ Drag & Drop JPG or Click to Upload
 <div id="progress"></div>
 </div>
 
-<div id="result" class="result"></div>
+<div id="result"></div>
 
 </div>
 
@@ -61,9 +91,20 @@ Drag & Drop JPG or Click to Upload
 
 setupTool("upload", function(file){
 
-let img = new Image()
+/* INPUT TABLE */
 
-img.onload = function(){
+document.getElementById("upload-status").innerHTML=
+
+"<table>"+
+"<tr><th colspan='2'>Input File Details</th></tr>"+
+"<tr><td>File Name</td><td>"+file.name+"</td></tr>"+
+"<tr><td>File Size</td><td>"+formatSize(file.size)+"</td></tr>"+
+"<tr><td>File Type</td><td>"+file.type+"</td></tr>"+
+"</table>"
+
+let img=new Image()
+
+img.onload=function(){
 
 let canvas=document.createElement("canvas")
 let ctx=canvas.getContext("2d")
@@ -77,16 +118,30 @@ canvas.toBlob(function(blob){
 
 let url=URL.createObjectURL(blob)
 
-document.getElementById("result").innerHTML =
-"<p>Output: "+file.name.replace('.jpg','.webp')+"</p>"+
-"<p>Size: "+formatSize(blob.size)+"</p>"+
-"<a href='"+url+"' download>Download WebP</a>"
+/* COMPRESSION CALCULATION */
+
+let saved = ((file.size - blob.size) / file.size) * 100
+saved = saved.toFixed(2)
+
+/* OUTPUT TABLE */
+
+document.getElementById("result").innerHTML=
+
+"<table>"+
+"<tr><th colspan='2'>Output File Details</th></tr>"+
+"<tr><td>Output Name</td><td>"+file.name.replace('.jpg','.webp')+"</td></tr>"+
+"<tr><td>Output Size</td><td>"+formatSize(blob.size)+"</td></tr>"+
+"<tr><td>Format</td><td>WebP</td></tr>"+
+"<tr><td>Compression Saved</td><td>"+saved+" %</td></tr>"+
+"</table>"+
+
+"<a class='download-btn' href='"+url+"' download>Download WebP</a>"
 
 },"image/webp",0.9)
 
 }
 
-img.src = URL.createObjectURL(file)
+img.src=URL.createObjectURL(file)
 
 })
 
