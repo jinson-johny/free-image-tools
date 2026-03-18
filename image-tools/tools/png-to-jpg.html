@@ -2,59 +2,156 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
+    <title>PNG to JPG Converter</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
 
-<meta charset="UTF-8">
-<title>PNG to JPG Converter</title>
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
 
-<link rel="stylesheet" href="../css/style.css">
+        th {
+            background: #f4f4f4;
+        }
 
+        #download-all {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: none; /* Hidden until files are processed */
+        }
+
+        #download-all:hover {
+            background: #ee5253;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="layout">
+    <div class="layout">
+        <div class="sidebar" id="sidebar"></div>
 
-<div class="sidebar" id="sidebar"></div>
+        <div class="workspace">
+            <h1>PNG to JPG Converter</h1>
+            <p>Upload a PNG image to convert it to JPG.</p>
 
-<div class="workspace">
+            <div id="upload" class="upload">
+                Drag & Drop PNG Image or Click to Upload
+            </div>
 
-<h1>PNG to JPG Converter</h1>
+            <div id="upload-status"></div>
 
-<p>Upload a PNG image to convert it to JPG.</p>
+            <div class="progress">
+                <div id="progress"></div>
+            </div>
 
-<div id="upload" class="upload">
-Drag & Drop PNG Image or Click to Upload
-</div>
+            <div id="result" class="result">
+                </div>
 
-<div id="info"></div>
+            <button id="download-all">Download All as ZIP</button>
+        </div>
 
-<div class="progress">
-<div id="bar"></div>
-</div>
+        <div class="ads">
+            <h3>Advertisement</h3>
+            <div class="adbox">Ad Space</div>
+        </div>
+    </div>
 
-<div id="result" class="result"></div>
+    <footer>
+        <a href="../about.html">About</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="../contact.html">Contact</a>
+    </footer>
 
-</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="../js/layout.js"></script>
+    <script src="../js/tool-ui.js"></script>
 
-<div class="ads">
+    <script>
+        let zip = new JSZip();
+        let resultsHtml = "";
 
-<h3>Advertisement</h3>
+        setupTool("upload", function (file) {
+            // Ensure we are dealing with a PNG (optional check)
+            if (file.type !== "image/png") {
+                alert("Please upload a PNG file.");
+                return;
+            }
 
-<div class="adbox">Ad Space</div>
+            let img = new Image();
+            img.onload = function () {
+                let canvas = document.createElement("canvas");
+                let ctx = canvas.getContext("2d");
 
-</div>
+                canvas.width = img.width;
+                canvas.height = img.height;
 
-</div>
+                // Set white background (PNGs often have transparency, JPGs don't)
+                ctx.fillStyle = "#FFFFFF";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw the image over the white background
+                ctx.drawImage(img, 0, 0);
 
-<footer>
+                // Convert to JPG blob (Quality set to 0.9)
+                canvas.toBlob(function (blob) {
+                    let saved = ((file.size - blob.size) / file.size) * 100;
+                    let fileName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+                    let url = URL.createObjectURL(blob);
 
-<a href="../about.html">About</a>
-<a href="../privacy.html">Privacy</a>
-<a href="../contact.html">Contact</a>
+                    resultsHtml += `
+                        <tr>
+                            <td>${file.name}</td>
+                            <td>${formatSize(file.size)}</td>
+                            <td>${formatSize(blob.size)}</td>
+                            <td>${saved.toFixed(2)}%</td>
+                            <td><a href="${url}" download="${fileName}">Download</a></td>
+                        </tr>`;
 
-</footer>
+                    document.getElementById("result").innerHTML = `
+                        <table>
+                            <tr>
+                                <th>File</th>
+                                <th>Original</th>
+                                <th>Converted</th>
+                                <th>Saved</th>
+                                <th>Action</th>
+                            </tr>
+                            ${resultsHtml}
+                        </table>`;
 
-<script src="../js/layout.js"></script>
+                    zip.file(fileName, blob);
+                    document.getElementById("download-all").style.display = "block";
 
+                }, "image/jpeg", 0.9);
+            };
+
+            img.src = URL.createObjectURL(file);
+        });
+
+        document.getElementById("download-all").onclick = function () {
+            zip.generateAsync({ type: "blob" }).then(function (content) {
+                let url = URL.createObjectURL(content);
+                let a = document.createElement("a");
+                a.href = url;
+                a.download = "png-to-jpg-converted.zip";
+                a.click();
+            });
+        };
+    </script>
 </body>
+
 </html>
